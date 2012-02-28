@@ -3,6 +3,6 @@
 using namespace std;
 
 int main() {
-	cout << "gtfo." << endl;
+	cout << "gtfo" << endl;
 	return 0;
 }
