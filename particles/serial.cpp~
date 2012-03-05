@@ -97,9 +97,6 @@ int main( int argc, char **argv )
     free( particles );
     if( fsave )
         fclose( fsave );
-    
-	cout<<"LOL: ";
-	getLol();
 
     return 0;
 }
