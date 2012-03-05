@@ -41,7 +41,7 @@ double read_timer( )
 
 //aksjdhkajsdhajksdh
 //  keep density constant
-//
+//asdasdasd
 double set_size( int n )
 {
     size = sqrt( density * n );
@@ -101,7 +101,7 @@ void apply_force( particle_t &particle, particle_t &neighbor )
     double dy = neighbor.y - particle.y;
     double r2 = dx * dx + dy * dy;
     if( r2 > cutoff*cutoff ){
-		cout<<"Too big"<<endl;
+		//cout<<"Too big"<<endl;
         return;
 	}
     r2 = fmax( r2, min_r*min_r );
