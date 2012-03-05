@@ -31,7 +31,7 @@ double read_timer( );
 //
 //  simulation routines
 //
-void set_size( int n );
+double set_size( int n );
 void init_particles( int n, particle_t *p );
 void apply_force( particle_t &particle, particle_t &neighbor );
 void move( particle_t &p );
@@ -48,5 +48,6 @@ void save( FILE *f, int n, particle_t *p );
 int find_option( int argc, char **argv, const char *option );
 int read_int( int argc, char **argv, const char *option, int default_value );
 char *read_string( int argc, char **argv, const char *option, char *default_value );
+void getLol();
 
 #endif

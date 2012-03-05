@@ -7,6 +7,9 @@
 #include <time.h>
 #include <sys/time.h>
 #include "common.h"
+#include <iostream>
+
+using namespace std;
 
 double size;
 
@@ -39,9 +42,11 @@ double read_timer( )
 //
 //  keep density constant
 //
-void set_size( int n )
+double set_size( int n )
 {
     size = sqrt( density * n );
+ 	cout << size << endl;
+    return size;
 }
 
 //
@@ -85,14 +90,20 @@ void init_particles( int n, particle_t *p )
 //
 //  interact two particles
 //
+int lol = 0;
+void getLol(){
+	cout<<lol<<endl;
+}
 void apply_force( particle_t &particle, particle_t &neighbor )
 {
 
     double dx = neighbor.x - particle.x;
     double dy = neighbor.y - particle.y;
     double r2 = dx * dx + dy * dy;
-    if( r2 > cutoff*cutoff )
+    if( r2 > cutoff*cutoff ){
+		cout<<"Too big"<<endl;
         return;
+	}
     r2 = fmax( r2, min_r*min_r );
     double r = sqrt( r2 );
 
@@ -102,6 +113,8 @@ void apply_force( particle_t &particle, particle_t &neighbor )
     double coef = ( 1 - cutoff / r ) / r2 / mass;
     particle.ax += coef * dx;
     particle.ay += coef * dy;
+
+    lol++;
 }
 
 //
@@ -131,6 +144,7 @@ void move( particle_t &p )
         p.y  = p.y < 0 ? -p.y : 2*size-p.y;
         p.vy = -p.vy;
     }
+	//cout << p.x << " " << p.y << endl;
 }
 
 //
