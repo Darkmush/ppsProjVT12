@@ -7,6 +7,8 @@
 
 #include "common.h"
 
+#define cutoff		0.01
+
 using namespace std;
 
 //
@@ -32,16 +34,10 @@ int main( int argc, char **argv )
     double size = set_size( n );
     init_particles( n, particles );
 
-	int numberOfRows = floor(size/0.01);
+	int numberOfRows = floor(size/cutoff);
 	cout<<numberOfRows*numberOfRows<<endl;
 
-	vector<particle_t> **matrix = createGrid(n);
-
-	for(int i = 0; i < numberOfRows; i++){
-		for(int j = 0; j < numberOfRows; j++){
-			matrix[i][j] = vector<particle_t>();
-		}
-	}
+	vector<particle_t> **matrix = createGrid(n, numberOfRows);
     
     //
     //  simulate a number of time steps

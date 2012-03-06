@@ -3,7 +3,12 @@
 #include <assert.h>
 #include <math.h>
 #include <pthread.h>
+#include <iostream>
 #include "common.h"
+
+#define cutoff 0.01
+
+using namespace std;
 
 //
 //  global variables
@@ -29,19 +34,42 @@ void *thread_routine( void *pthread_id )
     int first = min(  thread_id    * particles_per_thread, n );
     int last  = min( (thread_id+1) * particles_per_thread, n );
     
+    double size = set_size(n);
+	int numberOfRows = floor(size/cutoff);
+	cout<<numberOfRows*numberOfRows<<endl;
+
+	vector<particle_t> **matrix = createGrid(n, numberOfRows);
+    
     //
     //  simulate a number of time steps
     //
-    for( int step = 0; step < NSTEPS; step++ )
-    {
+    for( int step = 0; step < NSTEPS; step++ ){
+    
+		for(int i = 0; i < numberOfRows; i++){
+			for(int j = 0; j < numberOfRows; j++){
+				matrix[i][j].clear();
+			}
+		}
+
+		for(int i = 0; i < n; i++){
+			particle_t temp = particles[i];
+			int column = floor(temp.x/size*numberOfRows);
+			int row = floor(temp.y/size*numberOfRows);
+			matrix[row][column].push_back(temp);
+		}
+    
         //
         //  compute forces
         //
-        for( int i = first; i < last; i++ )
-        {
-            particles[i].ax = particles[i].ay = 0;
-            for (int j = 0; j < n; j++ )
-                apply_force( particles[i], particles[j] );
+        for( int i = first; i < last; i++ ){
+        	particles[i].ax = particles[i].ay = 0;
+        	
+			vector<particle_t> nearest = findNearest(particles[i], numberOfRows, size, matrix);
+			for(int j = 0; j < nearest.size(); j++) {
+				if(!(nearest[j].x == particles[i].x && nearest[j].y == particles[i].y)){
+					apply_force(particles[i], nearest[j]);				
+				}			
+			}
         }
         
         pthread_barrier_wait( &barrier );
@@ -59,6 +87,7 @@ void *thread_routine( void *pthread_id )
         //
         if( thread_id == 0 && fsave && (step%SAVEFREQ) == 0 )
             save( fsave, n, particles );
+            
     }
     
     return NULL;
@@ -131,5 +160,6 @@ int main( int argc, char **argv )
     if( fsave )
         fclose( fsave );
     
+    cout<<getLol()<<endl;
     return 0;
 }

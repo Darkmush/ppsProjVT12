@@ -50,12 +50,13 @@ void save( FILE *f, int n, particle_t *p );
 int find_option( int argc, char **argv, const char *option );
 int read_int( int argc, char **argv, const char *option, int default_value );
 char *read_string( int argc, char **argv, const char *option, char *default_value );
-void getLol();
+
 
 //
 // Våra funktioner
 //
-std::vector<particle_t> **createGrid(int n);
+std::vector<particle_t> **createGrid(int n, int numberOfRows);
 std::vector<particle_t> findNearest(particle_t temp, int numberOfRows, double size, std::vector<particle_t> **matrix);
+int getLol();
 
 #endif

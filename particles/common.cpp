@@ -91,7 +91,7 @@ void init_particles( int n, particle_t *p )
 //
 //  interact two particles
 //
-
+int lol = 0;
 void apply_force( particle_t &particle, particle_t &neighbor )
 {
 
@@ -110,6 +110,12 @@ void apply_force( particle_t &particle, particle_t &neighbor )
     double coef = ( 1 - cutoff / r ) / r2 / mass;
     particle.ax += coef * dx;
     particle.ay += coef * dy;
+    
+    lol++;
+}
+
+int getLol(){
+	return lol;
 }
 
 //
@@ -188,11 +194,17 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
 //Våra funktioner
 //
 
-vector<particle_t> **createGrid(int n){
+vector<particle_t> **createGrid(int n, int numberOfRows){
 	vector<particle_t> **temp;
 	temp = (vector<particle_t>**)malloc(sizeof(vector<particle_t>*)*n);
 	for(int i = 0; i < n; i++){
 		temp[i] = (vector<particle_t>*)malloc(sizeof(vector<particle_t>)*n);
+	}
+	
+	for(int i = 0; i < numberOfRows; i++){
+		for(int j = 0; j < numberOfRows; j++){
+			temp[i][j] = std::vector<particle_t>();
+		}
 	}
 
 	return temp;
