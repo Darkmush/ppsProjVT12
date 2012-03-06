@@ -21,7 +21,6 @@ int main( int argc, char **argv )
         printf( "-h to see this help\n" );
         printf( "-n <int> to set number of particles\n" );
         printf( "-o <filename> to specify the output file name\n" );
-        printf( "-p <int> number of threads\n" );
         return 0;
     }
 
@@ -41,48 +40,56 @@ int main( int argc, char **argv )
 	int numberOfRows = floor(size/cutoff);
 	cout<<numberOfRows*numberOfRows<<endl;
     
+   // vector<particle_t> **matrix = createGrid(n, numberOfRows);
     
  
     double simulation_time = read_timer( );
 	vector<particle_t> **matrix = createGrid(n, numberOfRows);
+	int row, column, i, j;
+	particle_t temp;
+	vector<particle_t> nearest;
 	
 	
-	
-    #pragma omp parallel num_threads(numThreads)
+    #pragma omp parallel num_threads(numThreads) private(i, j, nearest) firstprivate(row, column, temp)
     for( int step = 0; step < 1000; step++ ){
     	
 		#pragma omp for
-		for(int i = 0; i < numberOfRows; i++){
-			for(int j = 0; j < numberOfRows; j++){
+		for(i = 0; i < numberOfRows; i++){
+			for(j = 0; j < numberOfRows; j++){
 				matrix[i][j].clear();
 			}
 		}
 	
 		#pragma omp single
-		for(int i = 0; i < n; i++){	
-			particle_t temp = particles[i];
-			int column = floor(temp.x/size*numberOfRows);
-			int row = floor(temp.y/size*numberOfRows);
+		for(i = 0; i < n; i++){	
+			temp = particles[i];
+			column = floor(temp.x/size*numberOfRows);
+			row = floor(temp.y/size*numberOfRows);
+			//cout<<"row "<<row<<" column "<<column<<endl;
+			//#pragma omp critical
+			//{
 			matrix[row][column].push_back(temp);
+			//}
 		}
 		#pragma omp barrier
-
+		//cout<<"0"<<endl;
         //
         //  compute all forces
         //
-
+        //cout << "for in" << endl;
         #pragma omp for
-        for(int i = 0; i < n; i++ ){
-            particles[i].ax = particles[i].ay = 0;
-			vector<particle_t> nearest = findNearest(particles[i], numberOfRows, size, matrix);
-			
-			for(int j = 0; j < nearest.size(); j++) {
-				if(!(nearest[j].x == particles[i].x && nearest[j].y == particles[i].y)){
-					apply_force(particles[i], nearest[j]);				
+        for( int k = 0; k < n; k++ ){
+            particles[k].ax = particles[k].ay = 0;
+			//cout<<"tried nearest"<<endl;
+			nearest = findNearest(particles[k], numberOfRows, size, matrix);
+			//cout<<"done"<<endl;
+			for(int r = 0; r < nearest.size(); r++) {
+				if(!(nearest[r].x == particles[k].x && nearest[r].y == particles[k].y)){
+					apply_force(particles[k], nearest[r]);				
 				}			
 			}
 		}
-
+		//cout << "for ut" << endl;
         
         //
         //  move particles
@@ -98,6 +105,7 @@ int main( int argc, char **argv )
         if( fsave && (step%SAVEFREQ) == 0 )
             save( fsave, n, particles );
             
+        //cout << "timestep ut" << endl;
     }
     simulation_time = read_timer( ) - simulation_time;
     

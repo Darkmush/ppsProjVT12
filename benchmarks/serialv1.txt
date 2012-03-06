@@ -55,8 +55,38 @@ n = 1000, n_threads = 8, simulation time = 0.713329 seconds
 #Skiter i 100
 
 ******OpenMP*********
+Standard
+n = 2000, n_threads = 1, simulation time = 21.8281 seconds
+n = 2000, n_threads = 2, simulation time = 11.0513 seconds
+n = 2000, n_threads = 4, simulation time = 5.60735 seconds
+n = 2000, n_threads = 8, simulation time = 6.2402 seconds
 
+n = 1000, n_threads = 1, simulation time = 5.47816 seconds
+n = 1000, n_threads = 2, simulation time = 2.79606 seconds
+n = 1000, n_threads = 4, simulation time = 1.43884 seconds
+n = 1000, n_threads = 8, simulation time = 1.76647 seconds
 
+Fixed delad matris
+n = 2000, n_threads = 1, simulation time = 1.14731 seconds
+n = 2000, n_threads = 2, simulation time = 1.30908 seconds
+n = 2000, n_threads = 4, simulation time = 1.23743 seconds
+n = 2000, n_threads = 8, simulation time = 1.44205 seconds
+
+n = 1000, n_threads = 1, simulation time = 0.586098 seconds
+n = 1000, n_threads = 2, simulation time = 0.668454 seconds
+n = 1000, n_threads = 4, simulation time = 0.620215 seconds
+n = 1000, n_threads = 8, simulation time = 0.813987 seconds
+
+Fixed delad matris version++
+n = 2000, n_threads = 1, simulation time = 1.08293 seconds
+n = 2000, n_threads = 2, simulation time = 0.978465 seconds
+n = 2000, n_threads = 4, simulation time = 0.572293 seconds
+n = 2000, n_threads = 8, simulation time = 1.08507 seconds
+
+n = 1000, n_threads = 1, simulation time = 0.554023 seconds
+n = 1000, n_threads = 2, simulation time = 0.495667 seconds
+n = 1000, n_threads = 4, simulation time = 0.307426 seconds
+n = 1000, n_threads = 8, simulation time = 0.624568 seconds
 
 
 
