@@ -36,31 +36,36 @@ void *thread_routine( void *pthread_id )
     
     double size = set_size(n);
 	int numberOfRows = floor(size/cutoff);
-	cout<<numberOfRows*numberOfRows<<endl;
-
+	
 	vector<particle_t> **matrix = createGrid(n, numberOfRows);
     
     //
     //  simulate a number of time steps
     //
     for( int step = 0; step < NSTEPS; step++ ){
-    
+    //	cout << "timestep in" << endl;
+    	
+    //	cout << "Thread id: " <<thread_id<<" has first/last: "<< firstRow<<" "<<lastRow<<endl;
+    //	cout << "for clear in" << endl;
 		for(int i = 0; i < numberOfRows; i++){
 			for(int j = 0; j < numberOfRows; j++){
 				matrix[i][j].clear();
 			}
 		}
+		//cout << "for clear ut" << endl;
+
 
 		for(int i = 0; i < n; i++){
 			particle_t temp = particles[i];
 			int column = floor(temp.x/size*numberOfRows);
 			int row = floor(temp.y/size*numberOfRows);
+		//	cout<<"row: "<<row<<" column: "<<column<<" i: " << i<<endl;
 			matrix[row][column].push_back(temp);
 		}
-    
         //
         //  compute forces
         //
+        //cout << "for in" << endl;
         for( int i = first; i < last; i++ ){
         	particles[i].ax = particles[i].ay = 0;
         	
@@ -71,6 +76,7 @@ void *thread_routine( void *pthread_id )
 				}			
 			}
         }
+       // cout << "for ut" << endl;
         
         pthread_barrier_wait( &barrier );
         
@@ -87,6 +93,8 @@ void *thread_routine( void *pthread_id )
         //
         if( thread_id == 0 && fsave && (step%SAVEFREQ) == 0 )
             save( fsave, n, particles );
+            
+       // cout << "timestep ut" << endl;
             
     }
     
@@ -127,6 +135,12 @@ int main( int argc, char **argv )
     pthread_attr_t attr;
     P( pthread_attr_init( &attr ) );
     P( pthread_barrier_init( &barrier, NULL, n_threads ) );
+    
+    /////////////////////////////////////////////////////////
+    
+
+    
+    /////////////////////////////////////////////////////////
 
     int *thread_ids = (int *) malloc( n_threads * sizeof( int ) );
     for( int i = 0; i < n_threads; i++ ) 

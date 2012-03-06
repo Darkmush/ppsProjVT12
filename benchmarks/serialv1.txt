@@ -1,4 +1,4 @@
-Serial
+*******Serial**********
 Standard
 n = 2000, simulation time = 21.2497 seconds
 n = 1000, simulation time = 5.33721 seconds
@@ -9,7 +9,7 @@ n = 2000, simulation time = 1.10753 seconds
 n = 1000, simulation time = 0.568031 seconds
 n = 100, simulation time = 0.058308 seconds
 
-Pthreads
+********Pthreads*********
 Standard
 n = 2000, n_threads = 1, simulation time = 22.9196 seconds
 n = 2000, n_threads = 2, simulation time = 11.5851 seconds
@@ -26,7 +26,39 @@ n = 100, n_threads = 2, simulation time = 0.064204 seconds
 n = 100, n_threads = 4, simulation time = 0.054716 seconds
 n = 100, n_threads = 8, simulation time = 0.104315 seconds
 
-Fixed
+Fixed delad matris
+n = 2000, n_threads = 1, simulation time = 1.14359 seconds
+n = 2000, n_threads = 2, simulation time = 1.81452 seconds
+n = 2000, n_threads = 4, simulation time = 2.16935 seconds
+n = 2000, n_threads = 8, simulation time = 2.12089 seconds
+
+n = 1000, n_threads = 1, simulation time = 0.585928 seconds
+n = 1000, n_threads = 2, simulation time = 0.866968 seconds
+n = 1000, n_threads = 4, simulation time = 1.07876 seconds
+n = 1000, n_threads = 8, simulation time = 1.35237 seconds
+
+n = 100, n_threads = 1, simulation time = 0.066888 seconds
+n = 100, n_threads = 2, simulation time = 0.138199 seconds
+n = 100, n_threads = 4, simulation time = 0.16934 seconds
+n = 100, n_threads = 8, simulation time = 0.25096 seconds
+
+Fixed privat matris
+n = 2000, n_threads = 1, simulation time = 1.06751 seconds
+n = 2000, n_threads = 2, simulation time = 0.826273 seconds
+n = 2000, n_threads = 4, simulation time = 0.615108 seconds
+n = 2000, n_threads = 8, simulation time = 1.34211 seconds
+
+n = 1000, n_threads = 1, simulation time = 0.547699 seconds
+n = 1000, n_threads = 2, simulation time = 0.436799 seconds
+n = 1000, n_threads = 4, simulation time = 0.353786 seconds
+n = 1000, n_threads = 8, simulation time = 0.713329 seconds
+#Skiter i 100
+
+******OpenMP*********
+
+
+
+
 
 
 

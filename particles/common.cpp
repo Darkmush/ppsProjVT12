@@ -234,7 +234,6 @@ vector<particle_t> findNearest(particle_t temp, int numberOfRows, double size, v
 		}
 		
 	}
-
 	return val;
 }
 
