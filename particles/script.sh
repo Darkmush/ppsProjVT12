@@ -20,9 +20,9 @@ do
 			for j in 1 2 4 8
 			do
 				if [ $k == 3 ]; then
-					mpirun -np $j ${args[k]}Standard -n $i | grep "n = "
+					mpirun -np $j ./${args[k]}Standard -n $i | grep "n = "
 				else
-					${args[k]}Standard -n $i -p $j | grep "n = "
+					./${args[k]}Standard -n $i -p $j | grep "n = "
 				fi
 				
 				if [ $k == 0 ]; then
