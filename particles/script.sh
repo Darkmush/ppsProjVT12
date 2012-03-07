@@ -4,15 +4,11 @@ args=("$@")
 make clean
 make
 
-cd standard
-
-g++ -O3 serialStandard.cpp -o serialStandard -lm ../common.o
-g++ -O3 pthreadsStandard.cpp -o pthreadsStandard -lm ../common.o -lpthread
-g++ -O3 openmpStandard.cpp -o openmpStandard -lm ../common.o
+g++ -O3 serialStandard.cpp -o serialStandard -lm common.o
+g++ -O3 pthreadsStandard.cpp -o pthreadsStandard -lm common.o -lpthread
+g++ -O3 openmpStandard.cpp -o openmpStandard -lm common.o
 mpicc -cc=g++44 -c -O3 mpiStandard.cpp
-mpicc -cc=g++44 -o mpiStandard ../mpi.o ../common.o
-
-cd ..
+mpicc -cc=g++44 -o mpiStandard mpi.o common.o
 
 echo
 for k in 0 1 2 3
@@ -24,9 +20,9 @@ do
 			for j in 1 2 4 8
 			do
 				if [ $k == 3 ]; then
-					mpirun -np $j standard/${args[k]}Standard -n $i | grep "n = "
+					mpirun -np $j ${args[k]}Standard -n $i | grep "n = "
 				else
-					standard/${args[k]}Standard -n $i -p $j | grep "n = "
+					${args[k]}Standard -n $i -p $j | grep "n = "
 				fi
 				
 				if [ $k == 0 ]; then
