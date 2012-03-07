@@ -65,7 +65,6 @@ int main( int argc, char **argv )
 			int row = floor(temp.y/size*numberOfRows);
 			matrix[row][column].push_back(temp);
 		}
-		#pragma omp barrier
 
         //
         //  compute all forces
