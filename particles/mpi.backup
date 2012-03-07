@@ -4,10 +4,6 @@
 #include <assert.h>
 #include "common.h"
 #include <iostream>
-#include <vector>
-#include <math.h>
-
-#define cutoff 0.01
 
 using namespace std;
 
@@ -38,6 +34,11 @@ int main( int argc, char **argv )
     MPI_Init( &argc, &argv );
     MPI_Comm_size( MPI_COMM_WORLD, &n_proc );
     MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+    
+    ///////////////////////////////////////////
+    cout<<"rank: "<<rank<<" Size "<<n_proc<<endl;
+    
+    ///////////////////////////////////////////
     
     //
     //  allocate generic resources
@@ -70,27 +71,10 @@ int main( int argc, char **argv )
     //
     //  initialize and distribute the particles (that's fine to leave it unoptimized)
     //
-    double size2 = set_size( n );
-    if( rank == 0 ){
-    	//size2 = 
-		
+    set_size( n );
+    if( rank == 0 )
         init_particles( n, particles );
-    }
     MPI_Scatterv( particles, partition_sizes, partition_offsets, PARTICLE, local, nlocal, PARTICLE, 0, MPI_COMM_WORLD );
-    
-    //////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////
-    
-	int numberOfRows = floor(size2/cutoff);
-	//cout<<numberOfRows*numberOfRows<<endl;
-    
-    //if(rank == 0) {
-    vector<particle_t> **matrix = createGrid(n, numberOfRows);
-    //}
-    //MPI_Barrier(MPI_COMM_WORLD);
-    
-    ///////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////
     
     //
     //  simulate a number of time steps
@@ -98,29 +82,10 @@ int main( int argc, char **argv )
     double simulation_time = read_timer( );
     for( int step = 0; step < NSTEPS; step++ )
     {
-    	
-    	//cout << "timestep in" << endl;
         // 
-        //  collect all global data locally 
+        //  collect all global data locally (not good idea to do)
         //
         MPI_Allgatherv( local, nlocal, PARTICLE, particles, partition_sizes, partition_offsets, PARTICLE, MPI_COMM_WORLD );
-        
-        /////////////////////////////////////////////
-		for(int i = 0; i < numberOfRows; i++){
-			for(int j = 0; j < numberOfRows; j++){
-				matrix[i][j].clear();
-			}
-		}
-		
-		for(int i = 0; i < n; i++){	
-			particle_t temp = particles[i];
-			int column = floor(temp.x/size2*numberOfRows);
-			int row = floor(temp.y/size2*numberOfRows);
-			matrix[row][column].push_back(temp);
-		}
-        
-        /////////////////////////////////////////////7
-        
         
         //
         //  save current step if necessary (slightly different semantics than in other codes)
@@ -134,13 +99,8 @@ int main( int argc, char **argv )
         for( int i = 0; i < nlocal; i++ )
         {
             local[i].ax = local[i].ay = 0;
-			vector<particle_t> nearest = findNearest(local[i], numberOfRows, size2, matrix);
-			
-			for(int j = 0; j < nearest.size(); j++) {
-				if(!(nearest[j].x == local[i].x && nearest[j].y == local[i].y)){
-					apply_force(local[i], nearest[j]);				
-				}			
-			}
+            for (int j = 0; j < n; j++ )
+                apply_force( local[i], particles[j] );
         }
         
         //
@@ -148,8 +108,6 @@ int main( int argc, char **argv )
         //
         for( int i = 0; i < nlocal; i++ )
             move( local[i] );
-            
-     	//cout << "timestep out" << endl;
     }
     simulation_time = read_timer( ) - simulation_time;
     
@@ -167,9 +125,6 @@ int main( int argc, char **argv )
         fclose( fsave );
     
     MPI_Finalize( );
-    
-    cout<<getLol()<<endl;
-
     
     return 0;
 }

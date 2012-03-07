@@ -46,7 +46,7 @@ double read_timer( )
 double set_size( int n )
 {
     size = sqrt( density * n );
- 	cout << size << endl;
+ 	//cout << size << endl;
     return size;
 }
 
