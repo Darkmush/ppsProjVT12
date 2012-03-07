@@ -17,7 +17,7 @@ do
 			for j in 1 2 4 8
 			do
 				if [ $k == 3 ]; then
-					mpirun -np $j ./${args[k]}Standard - n $i | grep "n = "
+					mpirun -np $j ./${args[k]}Standard -n $i | grep "n = "
 				else
 					./${args[k]}Standard -n $i -p $j | grep "n = "
 				fi
@@ -34,7 +34,7 @@ do
 			for j in 1 2 4 8
 			do
 				if [ $k == 3 ]; then
-					mpirun -np $j ./${args[k]} - n $i | grep "n = "
+					mpirun -np $j ./${args[k]} -n $i | grep "n = "
 				else
 					./${args[k]} -n $i -p $j | grep "n = "
 				fi
