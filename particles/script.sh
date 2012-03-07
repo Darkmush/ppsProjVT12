@@ -39,7 +39,7 @@ do
 					./${args[k]} -n $i -p $j | grep "n = "
 				fi
 				
-				if [$k == 0 ]; then
+				if [ $k == 0 ]; then
 					break
 				fi
 			done
