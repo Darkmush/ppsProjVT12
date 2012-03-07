@@ -36,7 +36,7 @@ int main( int argc, char **argv )
     MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     
     ///////////////////////////////////////////
-    cout<<"rank: "<<rank<<" size "<<n_proc<<endl;
+    cout<<"rank: "<<rank<<" Size "<<n_proc<<endl;
     
     ///////////////////////////////////////////
     
