@@ -16,13 +16,13 @@ do
 		do
 			for j in 1 2 4 8
 			do
-				if [ $k = 3 ]; then
+				if [ $k == 3 ]; then
 					mpirun -np $j ./${args[k]}Standard - n $i | grep "n = "
 				else
 					./${args[k]}Standard -n $i -p $j | grep "n = "
 				fi
 				
-				if [$k = 0 ]; then
+				if [ $k == 0 ]; then
 					break
 				fi
 			done
@@ -33,13 +33,13 @@ do
 		do
 			for j in 1 2 4 8
 			do
-				if [ $k = 3 ]; then
+				if [ $k == 3 ]; then
 					mpirun -np $j ./${args[k]} - n $i | grep "n = "
 				else
 					./${args[k]} -n $i -p $j | grep "n = "
 				fi
 				
-				if [$k = 0 ]; then
+				if [$k == 0 ]; then
 					break
 				fi
 			done
