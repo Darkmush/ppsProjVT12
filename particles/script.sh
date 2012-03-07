@@ -1,6 +1,9 @@
 #!/bin/bash
 args=("$@")
 
+make clean
+make
+
 g++ -O3 serialStandard.cpp -o serialStandard -lm common.o
 g++ -O3 pthreadsStandard.cpp -o pthreadsStandard -lm common.o -lpthread
 g++ -O3 openmpStandard.cpp -o openmpStandard -lm common.o
