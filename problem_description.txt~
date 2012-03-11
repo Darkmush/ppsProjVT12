@@ -1,4 +1,4 @@
-Given four particle simlulation programs running in $O(n²)$ time complexity, where $n$ is the amount of particles, our task was to develop the following four programs:
+Given four particle simulation programs running in $O(n²)$ time complexity, where $n$ is the amount of particles, our task was to develop the following four programs:
 	
 	1. A sequential program that runs in $O(n)$.
 	2. A parallel program using the native pthreads library that runs close to $O(n)/p$, 			where p is the number of processes.
@@ -7,6 +7,6 @@ Given four particle simlulation programs running in $O(n²)$ time complexity, wh
 	
 The usage of the different libraries involved was known to us from earlier and it was clear to us that the make-it-or-break-it issue would be improving the algorithm. 
 
-We realised that the given algorithm was inefficient because in order to update the simulation, it checked every particles movement with every other particle in the simulation. Clearly, if two particles are very far away from one another then they will not affect each other very much, if anything at all. This problem too was realised by the initial algorithm which, due to inadequate datastructers, still had to check every particle with every other particle, and then discarded thoose that were to far away from one another. 
+We realized that the given algorithm was inefficient because in order to update the simulation, it checked every particles movement with every other particle in the simulation. Clearly, if two particles are very far away from one another then they will not affect each other very much, if anything at all. This problem too was realized by the initial algorithm which, due to inadequate data structures, still had to check every particle with every other particle, and then discarded thoose that were to far away from one another. 
 
 We found that to be rather silly and decided to implement a more elegant algorithm where we divided the simulation area into a grid and then only checked a given particle against particles that could be found in a grid-square close enough to be meaningfull. This way we managed to get the sequential version to run in  $O(n)$ time and after that we just had to parallelize it which, when using the libraries above, is no big deal.
