@@ -82,13 +82,97 @@ Clearly, the given algorithm was running in time $O(n^{2})$ because in order to 
 \rule{125mm}{0.1pt}
 \vspace{10pt}
 \\
-The function would simply return withouht doing anything at all if if the two particles where not within $0.01$ distance units away from each other. Since the width and hight of the total area was about $0.7$ when using the default value of $1000$ particles, checking every particle with every other was incredibly inefficient when only about $0-2$ particles would be in range each timestep.
+The function would simply return without doing anything at all if the two particles where not within $0.01$ distance units away from each other. Since the width and hight of the total area was about $0.7$ when using the default value of $1000$ particles, checking every particle with every other was incredibly inefficient when only about $0-2$ particles would be in range each timestep.
 \\
 \\
 The obvious way to improve this algorithm and take make it run in $O(n)$ was to reduce the \emph{apply\_force(particle a,particle b)} function calls so that each particle was only checked with particles in its close vicinity.
 
-We had different ideas of how to do this, but we finally settled for a solution that would prove work exceptionally: by dividing the simulation area into a grid, where each grid-square had widht and hight of $\geq cutoff$. Thus, for each particle we only had to check the particles in the neighboring grids since they were the only ones who could possibly be close enough for a collision to happen.
+We had different ideas of how to do this, but we finally settled for a solution that would prove work exceptionally: by dividing the simulation area into a grid, where each grid-square had widht and hight of $\geq cutoff$. Thus, for each particle we only had to check the particles in the neighboring eight grids since they were the only ones who could possibly be close enough for a collision to happen.
 \\
 \\
-fortsattning... hur vi gjorde griddet, find nearest etc.
+After creating the grid, we implemented a \emph{findNearest} function that returned all the particles in the vicinity of the input particle. In each timestep the grid had to be filled with the new positions of all particles, but this is done in $O(n)$ by simply checking each particle and now each particle only needed to be checked for collision by the ones close to it:
+\\
+\rule{125mm}{0.1pt}
+\begin{algorithmic}
+\STATE $n \gets numberOfParticles$
+\FOR{$i = 0 \to n$}
+	\STATE $particles[i].ax \gets 0$
+	\STATE $particles[i].ay \gets 0$
+	\STATE $nearParticles[] = findNearest(particles[i])$
+	\FOR{$j = 0 \to nearParticles.size$}
+			\STATE $apply\_force(particles[i],nearParticles[j])$
+	\ENDFOR
+\ENDFOR 
+\end{algorithmic}
+\rule{125mm}{0.1pt}
+\vspace{10pt}
+\\
+Since the particles are evenly distributed over the area, \emph{nearParticles.size} will rarely be greater than one (only in the case of a particle colliding with multiply others in the same timestep) and thus we had reduced the algorithm to $O(n)$.
+
+\subsection{Pthreads}
+When adapting this solution to be able to run parallel with \emph{pthreads} a slight change was needed: we split the particles up in a way so that each thread only checked collisions for a range of particles depending on the thread's id. Thus dividing the workload evenly.
+\\
+\rule{125mm}{0.1pt}
+\begin{algorithmic}
+\STATE $first \gets min(thread\_id * particles\_per\_thread,n)$
+\STATE $last \gets min((thread\_id+1) * particles\_per\_thread,n)$
+\STATE $n \gets numberOfParticles$
+\FOR{$i = first \to last$}
+	\STATE $particles[i].ax \gets 0$
+	\STATE $particles[i].ay \gets 0$
+	\STATE $nearParticles[] = findNearest(particles[i])$
+	\FOR{$j = 0 \to nearParticles.size$}
+			\STATE $apply\_force(particles[i],nearParticles[j])$
+	\ENDFOR
+\ENDFOR 
+\end{algorithmic}
+\rule{125mm}{0.1pt}
+\vspace{10pt}
+\\
+Where $particles\_per\_thread = (n+numThreads-1)/numThreads$. By having a barrier at the end of this section of code we also guaranteed that no thread would finish and start moving particles in the next timestep while others where still working.
+\subsection{OpenMP}
+To adapt the solution to be run in parallel in OpenMP we had the same approach of dividng up the particles checked between the threads. However, in OpenMP this was done much easier by simply using \emph{omp for}:
+\\
+\rule{125mm}{0.1pt}
+\begin{algorithmic}
+\STATE $n \gets numberOfParticles$
+\STATE $\#pragma\;omp\;for$
+\FOR{$i = 0 \to n$}
+	\STATE $particles[i].ax \gets 0$
+	\STATE $particles[i].ay \gets 0$
+	\STATE $nearParticles[] = findNearest(particles[i])$
+	\FOR{$j = 0 \to nearParticles.size$}
+			\STATE $apply\_force(particles[i],nearParticles[j])$
+	\ENDFOR
+\ENDFOR 
+\end{algorithmic}
+\rule{125mm}{0.1pt}
+\vspace{10pt}
+\\
+Since the grid was shared among the threads, we also had to make sure that it was only filled by one of the threads using \emph{\#pragma omp single} to avoid segmentation faults when adding particles.
+\subsection{MPI}
+Since we are unable to have global data accessable among the processes when using MPI, we had to collect all global data locally at the beginning of every timestep using the \emph{MPI\_Allgatherv} function. Each process had a local array containing the particles it was responsible for checking, this was (just as when using pthreads) calculated using the processe's \emph{rank} and the number of processes. Thus, the collision checking loop only checked the particles contained in its local array:
+\\
+\rule{125mm}{0.1pt}
+\begin{algorithmic}
+\STATE $nlocal\quad //size\;of\;local\;array$
+\STATE $local[]\quad //particles\;recieved\;from\;MPI\_Allgatherv$
+\FOR{$i = 0 \to nlocal$}
+	\STATE $local[i].ax \gets 0$
+	\STATE $local[i].ay \gets 0$
+	\STATE $nearParticles[] = findNearest(local[i])$
+	\FOR{$j = 0 \to nearParticles.size$}
+			\STATE $apply\_force(local[i],nearParticles[j])$
+	\ENDFOR
+\ENDFOR 
+\end{algorithmic}
+\rule{125mm}{0.1pt}
+\vspace{10pt}
+\\
+\section{Results}
+\subsection{Serial}
+\subsection{Pthreads}
+\subsection{OpenMP}
+\subsection{MPI}
+\section{Discussion}
 \end{document}
