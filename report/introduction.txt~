@@ -1,8 +1,0 @@
-As processors continue to get more and more cores the concept of parallelization has become inceasingly important. The key idea in parallelization is, as one might have guessed, to split the computations over several processes, or threads, such that each new process only works on a subset of the complete task. When all the computations are made the results are combined to form the final answer.
-
-This gives rise to a whole host of problems. What happens if one process changes the value of a variable that another process uses later on? Or what happens when two processes change the value of a variable at the same time, what value does that variable end up with? In order to solve these types of problems different mechanisms such as mutual exclusion, barriers, locks etcetera have been invented and are frequently used. This is known as parallel slowdown, since it takes time for processes to wait for one another at barriers or locks and such.
-
-It is often very hard to decrease the amount of parallel slowdown in a program since all those locks and barreiers and whatnot are there for a reason, without them the program could not be able to run in parallel at all. In order to get the best performance one must also look on other factors, such as choice of algorithm and datastructures etcetera.
-
-Our task in this project then was to improve the performance of a particle simulation program not only through parallelization but also by developing a quicker algorithm.
-
