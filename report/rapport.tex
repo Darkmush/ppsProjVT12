@@ -70,8 +70,8 @@ Clearly, the given algorithm was running in time $O(n^{2})$ because in order to 
 \rule{125mm}{0.1pt}
 \begin{algorithmic}
 \STATE $cutoff \gets 0.01$
-\STATE $dx \gets particleTwo.x - particleOne.x$
-\STATE $dy \gets particleTwo.y - particleOne.y$
+\STATE $dx \gets b.x - a.x$
+\STATE $dy \gets b.y - a.y$
 \STATE $r2 \gets dx*dx + dy*dy$
 \IF{$r2 > cutoff*cutoff$}
 	\STATE $return$
