@@ -10,6 +10,8 @@ g++ -O3 openmpStandard.cpp -o openmpStandard -lm common.o
 mpicc -cc=g++44 -c -O3 mpiStandard.cpp
 mpicc -cc=g++44 -o mpiStandard mpi.o common.o
 
+mpd&
+
 echo
 for k in 0 1 2 3
 do
