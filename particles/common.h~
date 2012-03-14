@@ -57,6 +57,6 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
 //
 std::vector<particle_t> **createGrid(int n, int numberOfRows);
 std::vector<particle_t> findNearest(particle_t temp, int numberOfRows, double size, std::vector<particle_t> **matrix);
-int getLol();
+//int getLol();
 
 #endif

@@ -68,15 +68,15 @@ int main( int argc, char **argv )
         //
         //  compute all forces
         //
+
         #pragma omp for
         for(int i = 0; i < n; i++ ){
             particles[i].ax = particles[i].ay = 0;
-            
-            //Find particles in range
 			vector<particle_t> nearest = findNearest(particles[i], numberOfRows, size, matrix);
+			
 			for(int j = 0; j < nearest.size(); j++) {
-				if(!(nearest[j].x == particles[i].x && nearest[j].y == particles[i].y)){ //Dont apply for to the curretn particle, i.e dont do apply_force(particles[i], particles[i]);
-					apply_force(particles[i], nearest[j]);	//DO IT!			
+				if(!(nearest[j].x == particles[i].x && nearest[j].y == particles[i].y)){
+					apply_force(particles[i], nearest[j]);				
 				}			
 			}
 		}

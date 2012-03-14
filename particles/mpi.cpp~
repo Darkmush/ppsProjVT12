@@ -126,7 +126,7 @@ int main( int argc, char **argv )
 			
 			for(int j = 0; j < nearest.size(); j++) {
 				if(!(nearest[j].x == local[i].x && nearest[j].y == local[i].y)){
-					apply_force(local[i], nearest[j]);	//Apply it!			
+					apply_force(local[i], nearest[j]);	//Apply it			
 				}			
 			}
         }
