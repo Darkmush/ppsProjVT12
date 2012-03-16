@@ -8,7 +8,7 @@ g++ -O3 serialStandard.cpp -o serialStandard -lm common.o
 g++ -O3 pthreadsStandard.cpp -o pthreadsStandard -lm common.o -lpthread
 g++ -O3 openmpStandard.cpp -o openmpStandard -lm common.o
 mpicc -cc=g++44 -c -O3 mpiStandard.cpp
-mpicc -cc=g++44 -o mpiStandard mpi.o common.o
+mpicc -cc=g++44 -o mpiStandard mpiStandard.o common.o
 
 mpd&
 

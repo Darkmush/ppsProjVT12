@@ -9,7 +9,7 @@
 \usepackage{algorithmic}
 \usepackage{url}
 
-
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
 \begin{document}
 \title{Parallelize Particle Simulation \\ Concurrent Programming \\ ID1217 vt12}
 \author{Dara Reyahi\quad \quad \quad \quad \quad \quad Carl Reg\aa rdh}
@@ -89,6 +89,13 @@ The obvious way to improve this algorithm and take make it run in $O(n)$ was to 
 
 We had different ideas of how to do this, but we finally settled for a solution that would prove work exceptionally: by dividing the simulation area into a grid, where each grid-square had widht and hight of $\geq cutoff$. Thus, for each particle we only had to check the particles in the neighboring eight grids since they were the only ones who could possibly be close enough for a collision to happen.
 \\
+\\
+\begin{figure}[htb]
+\centering
+\includegraphics[scale=3]{grid.eps}
+\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\label{fig:gird}
+\end{figure}
 \\
 After creating the grid, we implemented a \emph{findNearest} function that returned all the particles in the vicinity of the input particle. In each timestep the grid had to be filled with the new positions of all particles, but this is done in $O(n)$ by simply checking each particle and now each particle only needed to be checked for collision by the ones close to it:
 \\
@@ -175,13 +182,13 @@ Since we are unable to have global data accessable among the processes when usin
 \subsection{OpenMP}
 \subsection{MPI}
 \section{Discussion}
-As can be clearly seen from even a quick glance at the graphs in the result-section the biggest performance gain was achieved not from parallelization but from improving the time complexity of the algorithm, from $O(n²)$ to $O(n)$. When running the $O(n²)$ algorithm on a set of 2000 particles it requires circa 19.1 seconds to complete. The corresponding figure for the $O(n)$ algorithm is circa 1.2 seconds, a performance increase of a staggering 1592 percent. Meanwhile, the maximum performance increase gained from parallelizing was only (using pthreads and 4/4 cores) 335 percent. Indeed, the performance gain will be bigger in systems with more cores, but Amdahl's law tells us that as the amount of cores grow we will see diminishing returns in terms of performance boost.
+As can be clearly seen from even a quick glance at the graphs in the result-section the biggest performance gain was achieved not from parallelization but from improving the time complexity of the algorithm, from $O(n^{2})$ to $O(n)$. When running the $O(n^{2})$ algorithm on a set of 2000 particles it requires circa 19.1 seconds to complete. The corresponding figure for the $O(n)$ algorithm is circa 1.2 seconds, a performance increase of a staggering 1592 percent. Meanwhile, the maximum performance increase gained from parallelizing was only (using pthreads and 4/4 cores) 335 percent. Indeed, the performance gain will be bigger in systems with more cores, but Amdahl's law tells us that as the amount of cores grow we will see diminishing returns in terms of performance boost.
 
-So does this all make sense? Can we lean back and say "yes, this seems about right"? Lets have a look at what the mathematics tells us. First, Amdahl's law says that the maximum performance gain will be $speedup = 1/(s+((1 - s)/n)$, where $s = the percentage of the program that is sequential$ and $n = the number of cores used$. We cant be sure of the value of $s$ in our case so we are going to calculate it using the above formula. The speedup gained by going from 1 to 4 cores was approximately 3.35, so we have that $3.35 = 1/(s+((1 - s)/4)$ which gives $s = 0.065$. With that in mind, lets see how much speedup we can expect from a massive multi core system, with lets say 128 cores. Setting $n = 128$ gives us a speedup of around 13.8 times. This is indeed quite the performance gain but it is massively dwarfed by the performance gain given by the improved algorithm, where the time complexity decreases with the square root, from quadratic lo linear! This is backed up by the fact that $lim x -> inf sqr(n)/(s+((1 - s)/n)⁻¹ = sqr(n)$. All in all we are hence not surprised by the results and find them to be quite as expected.
+So does this all make sense? Can we lean back and say "yes, this seems about right"? Lets have a look at what the mathematics tells us. First, Amdahl's law says that the maximum performance gain will be $speedup = 1/(s+((1 - s)/n)$, where $s = the percentage of the program that is sequential$ and $n = the number of cores used$. We cant be sure of the value of $s$ in our case so we are going to calculate it using the above formula. The speedup gained by going from 1 to 4 cores was approximately 3.35, so we have that $3.35 = 1/(s+((1 - s)/4)$ which gives $s = 0.065$. With that in mind, lets see how much speedup we can expect from a massive multi core system, with lets say 128 cores. Setting $n = 128$ gives us a speedup of around 13.8 times. This is indeed quite the performance gain but it is massively dwarfed by the performance gain given by the improved algorithm, where the time complexity decreases with the square root, from quadratic lo linear! This is backed up by the fact that $lim x -> inf sqr(n)/(s+((1 - s)/n)^{-1} = sqr(n)$. All in all we are hence not surprised by the results and find them to be quite as expected.
 
-Lets be content with that and move on to assume that the algorithm cannot be improved any more, and the only remaining source for performance boosts will be from parallelization. The different libraries used  all have their pros and cons. Using the posix native pthreads library is convenient because it doesn't require any third-party library, that keeps things simple enough from a development point of view. OpenMP on the other hand provides unrivaled simplicity and will actually compile on computers without it because of the use of the #pragma directives. MPI was interesting because it was the only message passing library we used, it was also the quickest by a bit. Furthermore MPI can be used not only for multi threading in the same chip, but also across computers so that clusters can be built. This provides for a simple way to scale the application in a way that the other libraries cannot match.
+Lets be content with that and move on to assume that the algorithm cannot be improved any more, and the only remaining source for performance boosts will be from parallelization. The different libraries used  all have their pros and cons. Using the posix native pthreads library is convenient because it doesn't require any third-party library, that keeps things simple enough from a development point of view. OpenMP on the other hand provides unrivaled simplicity and will actually compile on computers without it because of the use of the \#pragma directives. MPI was interesting because it was the only message passing library we used, it was also the quickest by a bit. Furthermore MPI can be used not only for multi threading in the same chip, but also across computers so that clusters can be built. This provides for a simple way to scale the application in a way that the other libraries cannot match.
 
 At the end of the day we would probably decide to use OpenMP, if nothing else for its sheer simplicity which is simply unrivaled. We feel that developing a parallel application with OpenMP will be a lot quicker than with any of the other libraries, even for experienced developers, and time is as you know money. Yes, sure, our tests say that it is the slowest of the three but only by a little bit, in fact the difference between OpenMP and pthreads probably lies within the error margin.
 \section{Appendix}
-All programs were deceloped and tested on a x86_64 Intel Core Quad Q9400 running Red Hat Enterprise Linux 5.6. All code was compiled and linked with gcc 4.1.2. 
+All programs were deceloped and tested on a x86\_64 Intel Core Quad Q9400 running Red Hat Enterprise Linux 5.6. All code was compiled and linked with gcc 4.1.2. 
 \end{document}
