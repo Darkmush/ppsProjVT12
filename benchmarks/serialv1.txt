@@ -69,15 +69,15 @@ n = 1000, n_threads = 8, simulation time = 0.522443 seconds
 
 ********* mpi *********
 O(n^2/p)
-n = 2000, n_procs = 1, simulation time = 1.29988 s
-n = 2000, n_procs = 2, simulation time = 0.76981 s
-n = 2000, n_procs = 4, simulation time = 0.53175 s
-n = 2000, n_procs = 8, simulation time = 1.71077 s
+n = 2000, n_procs = 1, simulation time = 18.1022 s
+n = 2000, n_procs = 2, simulation time = 9.11224 s
+n = 2000, n_procs = 4, simulation time = 4.66257 s
+n = 2000, n_procs = 8, simulation time = 4.81451 s
 
-n = 1000, n_procs = 1, simulation time = 0.67421 s
-n = 1000, n_procs = 2, simulation time = 0.388739 s
-n = 1000, n_procs = 4, simulation time = 0.251158 s
-n = 1000, n_procs = 8, simulation time = 0.5787 s
+n = 1000, n_procs = 1, simulation time = 4.5758 s
+n = 1000, n_procs = 2, simulation time = 2.31136 s
+n = 1000, n_procs = 4, simulation time = 1.2136 s
+n = 1000, n_procs = 8, simulation time = 1.36067 s
 
 O(n/p)
 n = 2000, n_procs = 1, simulation time = 1.30103 s
@@ -87,7 +87,7 @@ n = 2000, n_procs = 8, simulation time = 1.83364 s
 
 n = 1000, n_procs = 1, simulation time = 0.653236 s
 n = 1000, n_procs = 2, simulation time = 0.389936 s
-n = 1000, n_procs = 4, simulation time = 0.27147 s
-n = 1000, n_procs = 8, simulation time = 0.779816 s
+n = 1000, n_procs = 4, simulation time = 0.248808 s
+n = 1000, n_procs = 8, simulation time = 0.541255 s
 
 
