@@ -92,7 +92,7 @@ We had different ideas of how to do this, but we finally settled for a solution 
 \\
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=3]{grid.eps}
+\includegraphics[scale=3]{pics/grid.png}
 \caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
 \label{fig:gird}
 \end{figure}
@@ -176,11 +176,50 @@ Since we are unable to have global data accessable among the processes when usin
 \rule{125mm}{0.1pt}
 \vspace{10pt}
 \\
+\newpage
 \section{Results}
 \subsection{Serial}
 \subsection{Pthreads}
+daa
+\begin{figure}[htb]
+\centering
+\includegraphics[scale=0.8]{pics/pth1.png}
+\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\label{fig:gird}
+\end{figure}
+da
+\begin{figure}[htb]
+\centering
+\includegraphics[scale=0.8]{pics/pth2.png}
+\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\label{fig:gird}
+\end{figure}
+aa
 \subsection{OpenMP}
+sdf
+\begin{figure}[htb]
+\centering
+\includegraphics[scale=0.8]{pics/open1.png}
+\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\label{fig:gird}
+\end{figure}
+
 \subsection{MPI}
+sdf
+\begin{figure}[htb]
+\centering
+\includegraphics[scale=0.8]{pics/mpi1.png}
+\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\label{fig:gird}
+\end{figure}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[scale=0.8]{pics/mpi2.png}
+\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\label{fig:gird}
+\end{figure}
+\newpage
 \section{Discussion}
 As can be clearly seen from even a quick glance at the graphs in the result-section the biggest performance gain was achieved not from parallelization but from improving the time complexity of the algorithm, from $O(n^{2})$ to $O(n)$. When running the $O(n^{2})$ algorithm on a set of 2000 particles it requires circa 19.1 seconds to complete. The corresponding figure for the $O(n)$ algorithm is circa 1.2 seconds, a performance increase of a staggering 1592 percent. Meanwhile, the maximum performance increase gained from parallelizing was only (using pthreads and 4/4 cores) 335 percent. Indeed, the performance gain will be bigger in systems with more cores, but Amdahl's law tells us that as the amount of cores grow we will see diminishing returns in terms of performance boost.
 
