@@ -178,47 +178,66 @@ Since we are unable to have global data accessable among the processes when usin
 \\
 \newpage
 \section{Results}
+In this section, the results are presented in charts to easily demostrate speed improvements. A full list containing the data can be found in the apendix.
 \subsection{Serial}
+The results from our version of the serial implementation clearly showed that we had managed to improve the algorithm to run in $O(n)$. \\
+\begin{center}
+    \begin{tabular}{ | l | l | l |}
+    \hline
+    Num Particles & $O(n)$ & $O(n^{2})$  \\ \hline
+    100 & 0.06s & 0.06s  \\ \hline
+    500 & 0.3s & 1.08s  \\ \hline
+    1000 & 0.6s & 4.79s  \\ \hline
+    2000 & 1.19s & 19.1s \\
+    \hline
+    \end{tabular}
+\end{center}
+\begin{figure}[htb]
+\centering
+\includegraphics[scale=1]{pics/serial.png}
+\caption{\emph{Comparison between the given algorithm and our improved version.}}
+\label{fig:gird}
+\end{figure}
 \subsection{Pthreads}
-daa
+Looking at the results from our pthreads implementation, we saw that we had been successful in parallelising our algorithm. \newpage
+\vspace{10pt}
 \begin{figure}[htb]
 \centering
 \includegraphics[scale=0.8]{pics/pth1.png}
-\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\caption{\emph{Runtime of the given pthreads-implementation depending on number of threads and particles.}}
 \label{fig:gird}
 \end{figure}
-da
+\vspace{10pt}
+
 \begin{figure}[htb]
 \centering
 \includegraphics[scale=0.8]{pics/pth2.png}
-\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\caption{\emph{Runtime of our pthreads-implementation depending on number of threads and particles.}}
 \label{fig:gird}
 \end{figure}
-aa
+\newpage
 \subsection{OpenMP}
-sdf
-\begin{figure}[htb]
+\begin{figure}[h!]
 \centering
 \includegraphics[scale=0.8]{pics/open1.png}
-\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\caption{\emph{Runtime of our OpenMP-implementation depending on number of threads and particles}.}
 \label{fig:gird}
 \end{figure}
-
 \subsection{MPI}
-sdf
-\begin{figure}[htb]
+\begin{figure}[h!]
 \centering
 \includegraphics[scale=0.8]{pics/mpi1.png}
-\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\caption{\emph{Runtime of the given MPI-implementation depending on number of threads and particles.}}
 \label{fig:gird}
 \end{figure}
 
 \begin{figure}[htb]
 \centering
 \includegraphics[scale=0.8]{pics/mpi2.png}
-\caption{\emph{For each particle, only the eight neighboring squares need to be checked for collisions.}}
+\caption{\emph{Runtime of our MPI-implementation depending on number of threads and particles.}}
 \label{fig:gird}
 \end{figure}
+
 \newpage
 \section{Discussion}
 As can be clearly seen from even a quick glance at the graphs in the result-section the biggest performance gain was achieved not from parallelization but from improving the time complexity of the algorithm, from $O(n^{2})$ to $O(n)$. When running the $O(n^{2})$ algorithm on a set of 2000 particles it requires circa 19.1 seconds to complete. The corresponding figure for the $O(n)$ algorithm is circa 1.2 seconds, a performance increase of a staggering 1592 percent. Meanwhile, the maximum performance increase gained from parallelizing was only (using pthreads and 4/4 cores) 335 percent. Indeed, the performance gain will be bigger in systems with more cores, but Amdahl's law tells us that as the amount of cores grow we will see diminishing returns in terms of performance boost.
